@@ -28,7 +28,7 @@ class DetectionServices:
                 detection_res = "Feeling sad!! This steel sheet image is defective"\
                                 " and it has total {} types of defects.".format(detected_defects)
             else:
-                detection_res = "Cheer up!! This steel sheet image isn't defective."
+                detection_res = "Cheer up!! This steel sheet image isn't defective ."
 
         except Exception as v_exc:
             detection_res = v_exc.__str__()
