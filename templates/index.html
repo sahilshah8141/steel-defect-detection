@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="{{ url_for('static', path='/styles/index.css') }}" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="title">
+        Steel Defect Detection
+    </div>
+    </br>
+        <img class="img-cover" src="../static/shutterstock_1203853255_resized-min.jpg" alt="Steel Sheet Image">
+    </br>
+    <form action="#" enctype="multipart/form-data" target="upload_target">
+        <div class="row">
+            <div class="col-25">
+                <label style="font-size:21px; font-family:sans-serif;" >Upload The Steel Image: </label>
+            </div>
+            <div class="col-75">
+                </br>
+                <input name="files" type="file" id="file">
+            </div>
+        </div>
+
+        </br>
+        <div class="row">
+            <button id="submit" value="Submit">Submit</button>
+        </div>
+        </br>
+        </br>
+
+        <div class="row" id="image-result-container">
+            <span id="result" class="d-flex align-items-center">
+                <img id="user_uploaded_img" src="" style="display:inline;" class="col-50"/>
+                <span id="detection_result" class="col-50" style="display:inline;"></span>
+            </span>
+        </div>
+
+    </form>
+
+    <iframe id="upload_target" name="upload_target" src="#" style="width:0;height:0;border:0px solid #fff;"></iframe>
+
+</div>
+<script>
+
+
+$("#submit").click(function() {
+    var fd = new FormData();
+    var file = $('#file')[0].files;
+    var specific_file = file[0]
+    console.log("specific_file", specific_file)
+    var imageType = /image.*/;
+
+    // Check file selected or not
+    if(file.length > 0 ){
+
+        if (specific_file.type.match(imageType)) {
+            fd.append('file', specific_file);
+
+           $.ajax({
+              url: "/detect",
+              type: 'post',
+              data: fd,
+              contentType: false,
+              processData: false,
+              success: function(response){
+                 if(response){
+                    const reader = new FileReader();
+                    reader.readAsDataURL(specific_file);
+
+                    reader.onloadend = () => {
+                      document.getElementById("user_uploaded_img").src = reader.result;
+                    };
+
+                    let resultString = JSON.stringify(response);
+                    let result_json = JSON.parse(resultString);
+                    let data = result_json['data'];
+                    console.log(data)
+                    $('#image-result-container').addClass('image-result-container')
+                    document.getElementById("result").style.visibility = "visible"
+                    document.getElementById("detection_result").innerHTML = "Result: " + data;
+                 }else{
+                    alert('file not uploaded');
+                 }
+              },
+           });
+        }else{
+           alert("Please select an image file.");
+        }
+    }else{
+       alert("Please select a file.");
+    }
+  });
+</script>
+</body>
+</html>
+
