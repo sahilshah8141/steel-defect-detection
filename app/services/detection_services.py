@@ -4,10 +4,10 @@ from tensorflow.keras.models import load_model
 import numpy as np
 
 project_path = Path(__file__).parent.parent.parent
-model_detection_file = os.path.join(project_path, "model/inceptionv4.h5")
+model_detection_file = os.path.join(project_path, "model/inceptionv3.h5")
 image_shape = (256, 1600, 3)
 defection_types = ['defect_1', 'defect_2', 'defect_3', 'defect_4']
-threshold = 0.01
+threshold = 0.99
 model = load_model(model_detection_file)
 
 
