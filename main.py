@@ -17,7 +17,7 @@ def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 ## For Heroku deployment
-# app.include_router(prediction_router, prefix="/predict")
+# app.include_router(detection_router, prefix="/detect")
 
 if __name__ == "__main__":
     app.include_router(detection_router, prefix="/detect")
