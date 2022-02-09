@@ -7,7 +7,7 @@ project_path = Path(__file__).parent.parent.parent
 model_detection_file = os.path.join(project_path, "model/inceptionv4.h5")
 image_shape = (256, 1600, 3)
 defection_types = ['defect_1', 'defect_2', 'defect_3', 'defect_4']
-threshold = 0.9999
+threshold = 0.01
 model = load_model(model_detection_file)
 
 
