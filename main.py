@@ -16,6 +16,7 @@ app = get_app()
 def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+
 # For Heroku deployment
 app.include_router(detection_router, prefix="/detect")
 
