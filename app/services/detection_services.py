@@ -25,8 +25,11 @@ class DetectionServices:
             detected_defects = detection_res.count(1)
 
             if detected_defects:
-                detection_res = "Feeling sad!! This steel sheet image is defective"\
-                                " and it has total {} types of defects.".format(detected_defects)
+                if detected_defects == 1:
+                    detection_res = "Feeling sad!! This steel sheet image is defective and it has 1 type of defect."
+                else:
+                    detection_res = "Feeling sad!! This steel sheet image is defective" \
+                                    " and it has total {} types of defects.".format(detected_defects)
             else:
                 detection_res = "Cheer up!! This steel sheet image isn't defective ."
 
