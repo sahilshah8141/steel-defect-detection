@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from tensorflow.keras.models import load_model
 import numpy as np
+import skimage.io
 
 project_path = Path(__file__).parent.parent.parent
 model_detection_file = os.path.join(project_path, "model/inceptionv3.h5")
@@ -14,13 +15,12 @@ model = load_model(model_detection_file)
 class DetectionServices:
 
     @staticmethod
-    def defect_detection_service(user_image):
+    def defect_detection_service(user_image_url):
 
         try:
-            user_img_arr = user_image
+            user_img_arr = skimage.io.imread(user_image_url)
             user_img_arr = user_img_arr.reshape((1,) + image_shape)
             detection_res = model.predict(user_img_arr)
-            print("***", detection_res)
             detection_res = np.where(detection_res > threshold, 1, 0).tolist()[0]
             detected_defects = detection_res.count(1)
 

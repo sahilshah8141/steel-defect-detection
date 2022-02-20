@@ -5,7 +5,6 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 </head>
 <body>
-
 <div class="container">
     <div class="title">
         Steel Defect Detection
@@ -43,8 +42,10 @@
     <iframe id="upload_target" name="upload_target" src="#" style="width:0;height:0;border:0px solid #fff;"></iframe>
 
 </div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-
+var CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dnz9tlf5t/upload";
+var CLOUDINARY_UPLOAD_PRESET = "tvx9delz";
 
 $("#submit").click(function() {
     var fd = new FormData();
@@ -58,34 +59,50 @@ $("#submit").click(function() {
 
         if (specific_file.type.match(imageType)) {
             fd.append('file', specific_file);
+            fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
 
-           $.ajax({
-              url: "/detect",
-              type: 'post',
-              data: fd,
-              contentType: false,
-              processData: false,
-              success: function(response){
-                 if(response){
-                    const reader = new FileReader();
-                    reader.readAsDataURL(specific_file);
+            axios({
+                url: CLOUDINARY_URL,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                data: fd
+            }).then(function(res){
+                var request_payload = {
+                    "image_url": res.data.url
+                };
+                let request_payload_string = JSON.stringify(request_payload);
 
-                    reader.onloadend = () => {
-                      document.getElementById("user_uploaded_img").src = reader.result;
-                    };
+                $.ajax({
+                  url: "/detect",
+                  type: 'post',
+                  contentType: 'application/json',
+                  data: request_payload_string,
+                  dataType: 'json',
+                  success: function(response){
+                     if(response){
+                        const reader = new FileReader();
+                        reader.readAsDataURL(specific_file);
 
-                    let resultString = JSON.stringify(response);
-                    let result_json = JSON.parse(resultString);
-                    let data = result_json['data'];
-                    console.log(data)
-                    $('#image-result-container').addClass('image-result-container')
-                    document.getElementById("result").style.visibility = "visible"
-                    document.getElementById("detection_result").innerHTML = "Result: " + data;
-                 }else{
-                    alert('file not uploaded');
-                 }
-              },
-           });
+                        reader.onloadend = () => {
+                          document.getElementById("user_uploaded_img").src = reader.result;
+                        };
+
+                        let resultString = JSON.stringify(response);
+                        let result_json = JSON.parse(resultString);
+                        let data = result_json['data'];
+                        $('#image-result-container').addClass('image-result-container')
+                        document.getElementById("result").style.visibility = "visible"
+                        document.getElementById("detection_result").innerHTML = "Result: " + data;
+                     }else{
+                        alert('file not uploaded');
+                     }
+                  },
+               });
+            }).catch(function(err){
+                console.error(err);
+            });
         }else{
            alert("Please select an image file.");
         }

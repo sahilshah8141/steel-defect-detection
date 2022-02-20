@@ -18,8 +18,8 @@ def index(request: Request):
 
 
 # For Heroku deployment
-app.include_router(detection_router, prefix="/detect")
+# app.include_router(detection_router, prefix="/detect")
 
-# if __name__ == "__main__":
-#     app.include_router(detection_router, prefix="/detect")
-#     uvicorn.run(app, host="localhost", port=8007)
+if __name__ == "__main__":
+    app.include_router(detection_router, prefix="/detect")
+    uvicorn.run(app, host="localhost", port=8007)
