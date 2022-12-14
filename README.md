@@ -17,7 +17,7 @@
 
 ## 📝 Description
 - In this project, I have used the **Inceptionv3** and **Inception v4** model with transfer learning for steel defect detection.
-- You can check out the deployed web application on http://steeldefect.herokuapp.com/ which runs the lightweight v3 model (**Testing image:** https://res.cloudinary.com/dnz9tlf5t/image/upload/v1645286147/hvknl7w2le3tbss6pjkx.jpg).
+- You can check out the deployed web application on http://steeldefect.herokuapp.com/ which runs the lightweight v3 model (**Testing image:** http://res.cloudinary.com/dnz9tlf5t/image/upload/v1670988221/qevx8khsluuign7llbzm.jpg).
 
 ## ⏳ Dataset
 - For the training, I have used the dataset of the Kaggle competition hosted by Severstal.
