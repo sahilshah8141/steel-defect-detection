@@ -8,7 +8,7 @@ project_path = Path(__file__).parent.parent.parent
 model_detection_file = os.path.join(project_path, "model/inceptionv3.h5")
 image_shape = (256, 1600, 3)
 defection_types = ['defect_1', 'defect_2', 'defect_3', 'defect_4']
-threshold = 0.99
+thresholds = [0.99999988079071044922, 0.00000000000000000679, 0.62790417671203613281, 0.00000000000169181238]
 model = load_model(model_detection_file)
 
 
@@ -19,10 +19,14 @@ class DetectionServices:
 
         try:
             user_img_arr = skimage.io.imread(user_image_url)
+            user_img_arr = user_img_arr/255.
             user_img_arr = user_img_arr.reshape((1,) + image_shape)
             detection_res = model.predict(user_img_arr)
-            detection_res = np.where(detection_res > threshold, 1, 0).tolist()[0]
-            detected_defects = detection_res.count(1)
+            detected_defects = 0
+
+            for pred_result, threshold in zip(detection_res.tolist()[0], thresholds):
+                if pred_result >= threshold:
+                    detected_defects += 1
 
             if detected_defects:
                 if detected_defects == 1:
